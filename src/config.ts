@@ -1,30 +1,38 @@
+import 'dotenv/config';
+
 import { ServerOptions } from './types/ServerOptions';
 
 export default {
-  secretKey: 'THISISMYSECURETOKEN',
+  secretKey: process.env.SECRET_KEY,
   host: 'http://localhost',
   port: '21465',
-  deviceName: 'WppConnect',
-  poweredBy: 'WPPConnect-Server',
+  deviceName: 'balleia-api',
+  poweredBy: 'balleia-servicos',
   startAllSession: true,
   tokenStoreType: 'file',
-  maxListeners: 15,
+  maxListeners: 0,
   customUserDataDir: './userDataDir/',
   webhook: {
-    url: null,
+    url: String(process.env.WEBHOOK_URL),
     autoDownload: true,
     uploadS3: false,
     readMessage: true,
     allUnreadOnStart: false,
-    listenAcks: true,
-    onPresenceChanged: true,
-    onParticipantsChanged: true,
-    onReactionMessage: true,
+    listenAcks: false,
+    onPresenceChanged: false,
+    onParticipantsChanged: false,
+    onReactionMessage: false,
     onPollResponse: true,
-    onRevokedMessage: true,
-    onLabelUpdated: true,
+    onRevokedMessage: false,
+    onLabelUpdated: false,
     onSelfMessage: false,
-    ignore: ['status@broadcast'],
+    ignore: [
+      'status@broadcast',
+      'news@broadcast',
+      'status-find',
+      'qrcode',
+      'phoneCode',
+    ],
   },
   websocket: {
     autoDownload: false,
@@ -40,7 +48,7 @@ export default {
     daysToArchive: 45,
   },
   log: {
-    level: 'silly', // Before open a issue, change level to silly and retry a action
+    level: 'info', // Before open a issue, change level to silly and retry a action
     logger: ['console', 'file'],
   },
   createOptions: {
@@ -57,8 +65,6 @@ export default {
       '--disable-default-apps',
       '--disable-extensions',
       '--disable-sync',
-      '--disable-dev-shm-usage',
-      '--disable-gpu',
       '--disable-translate',
       '--hide-scrollbars',
       '--metrics-recording-only',
@@ -84,12 +90,12 @@ export default {
     prefix: 'tagone-',
   },
   db: {
-    mongodbDatabase: 'tokens',
-    mongodbCollection: '',
-    mongodbUser: '',
-    mongodbPassword: '',
-    mongodbHost: '',
-    mongoIsRemote: true,
+    mongodbDatabase: process.env.MONGO_DB,
+    mongodbCollection: 'balleia-test',
+    mongodbUser: process.env.MONGO_USER,
+    mongodbPassword: process.env.MONGO_PASS,
+    mongodbHost: process.env.MONGO_HOST,
+    mongoIsRemote: false,
     mongoURLRemote: '',
     mongodbPort: 27017,
     redisHost: 'localhost',
